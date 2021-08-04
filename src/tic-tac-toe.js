@@ -18,27 +18,28 @@ class TicTacToe {
         [3, 5, 7]
       ],
 
-      this.finised = false
+      this.winner = ''
 
   }
 
   getCurrentPlayerSymbol() {
-    // console.log('getCurrentPlayerSymbol', this.player )
     return this.player
   }
 
   nextTurn(rowIndex, columnIndex) {
-    // console.log('nextTurn()', rowIndex, columnIndex,this.player)
+ 
     if (this.matrix[rowIndex][columnIndex]) return null
     this.matrix[rowIndex][columnIndex] = this.player
     this.player = this.player === 'x' ? 'o' : 'x'
   }
 
   isFinished() {
-    if (this.finished) {
+    this.getWinner()
+    let draw = this.isDraw()
+    if (this.winner === 'x' || this.winner === 'o' || draw){
       return true
-    }
-    return false
+    } 
+    return false    
   }
 
   getWinner() {
@@ -49,17 +50,20 @@ class TicTacToe {
     }
     for (let i = 0; i < this.win.length; i++) {
       if (this.win[i].every(item => arr.indexOf(item) !== -1)) {
-        this.finised = true
+     
+        this.winner = curPlayer
         return curPlayer
       }
     }
-    curPlayer = curPlayer==='x'?'o':'x'
+    curPlayer = curPlayer === 'x' ? 'o' : 'x'
     arr = []
     for (let i = 0; i < 9; i++) {
       arr[i] = this.matrix[Math.floor((i) / 3)][i % 3] === curPlayer ? i + 1 : 0
     }
     for (let i = 0; i < this.win.length; i++) {
       if (this.win[i].every(item => arr.indexOf(item) !== -1)) {
+   
+        this.winner = curPlayer
         return curPlayer
       }
     }
@@ -67,25 +71,20 @@ class TicTacToe {
   }
 
   noMoreTurns() {
-    // console.log('noMoreTurns', this.matrix.flat(1),  this.player)
     if (this.matrix.flat(1).indexOf(null) === -1) {
-      // console.log('yes! noMoreTurns')
       return true
     }
     return false
   }
 
   isDraw() {
-    // console.log('isDraw', this.player)
     if (this.noMoreTurns() && !this.getWinner()) {
-      this.finished = true
       return true
     }
     return false
   }
 
   getFieldValue(rowIndex, colIndex) {
-    // console.log('getFieldValue', rowIndex, colIndex, this.player)
     return this.matrix[rowIndex][colIndex]
   }
 }
